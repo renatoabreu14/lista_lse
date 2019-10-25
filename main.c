@@ -31,8 +31,14 @@ void insereIni(struct listaEnc *pList, int valor){
     pList->prim = novo;
 }
 
-void insereFim(){
-
+void insereFim(struct listaEnc *pList, int valor){
+    struct no *p;
+    for(p = pList->prim; p->prox != NULL; p = p->prox);
+    struct no *novo;
+    novo = (struct no*)malloc(sizeof(struct no));
+    novo->valor = valor;
+    novo->prox = p->prox;
+    p->prox = novo;
 }
 
 void removeIni(struct listaEnc *pList){
@@ -43,8 +49,13 @@ void removeIni(struct listaEnc *pList){
 
 void removeFim(struct listaEnc *pList){
     struct no *p;
+    struct no *pAux;
     for(p = pList->prim; p != NULL; p = p->prox){
-        if (p->prox.prox == NULL)
+        pAux = p->prox;
+        if (pAux->prox == NULL){
+            p->prox = NULL;
+            free(pAux);
+        }
     }
 }
 
@@ -58,11 +69,18 @@ int main() {
     criarLista(&minhaLista);
     do{
         printf( "1 - Inserir elemento no inicio\n" );
-        printf( "2 - Inserir elemento em ordem (so se a lista estiver ordenada)\n" );
-        printf( "3 - Remover elemento no inicio\n" );
-        printf( "4 - Remover elemento\n" );
-        printf( "5 - Mostrar lista\n" );
-        printf( "6 - Sair\n" );
+        printf( "2 - Inserir elemento no fim\n" );
+        printf( "3 - Inserir elemento em ordem (so se a lista estiver ordenada)\n" );
+        printf( "4 - Remover elemento no inicio\n" );
+        printf( "5 - Remover elemento no fim\n" );
+        printf( "6 - Remover elemento\n" );
+        printf( "7 - Mostrar lista\n" );
+        printf( "8 - Numero de elementos na lista\n" );
+        printf( "9 - Qual a posicao do elemento\n" );
+        printf( "10 - Inserir apos o valor\n" );
+        printf( "11 - Inserir antes do valor\n" );
+        printf( "12 - Inverter lista\n" );
+        printf( "13 - Sair\n" );
         printf( "Opcao? " );
         scanf( "%d", &op );
         switch (op){
@@ -73,16 +91,26 @@ int main() {
                 break;
             }
             case 2:{
+                printf("Informe o valor:");
+                scanf("%d", &valor);
+                insereFim(&minhaLista, valor);
                 break;
             }
             case 3:{
-                removeIni(&minhaLista);
                 break;
             }
             case 4:{
+                removeIni(&minhaLista);
                 break;
             }
             case 5:{
+                removeFim(&minhaLista);
+                break;
+            }
+            case 6:{
+                break;
+            }
+            case 7:{
                 if (listaVazia(minhaLista)){
                     printf("Lista vazia\n");
                 }else{
@@ -90,6 +118,16 @@ int main() {
                 }
                 break;
             }
+            case 8:{
+                printf("A lista contem $d elemento(s)", numerodeelementos(minhaLista));
+                break;
+            }
         }
-    }while(op != 6);
+    }while(op != 13);
 }
+
+//numero de elementos
+//em qual posição o elemento se encontra sabendo que a primeira posição eh 0
+//inserir após valor
+//inserir antes valor
+//inverter lista
